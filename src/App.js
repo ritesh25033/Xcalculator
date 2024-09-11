@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import './App.css';
+import Display from './component/Display';
+import Buttons from './component/Button';
+import Result from './component/Result';
 
 function App() {
+  const [expression, setExpression] = useState('');
+  const [result, setResult] = useState('');
+
+  const handleButtonClick = (value) => {
+    if (value === 'C') {
+      setExpression('');
+      setResult('');  // Clear both expression and result
+    } else if (value === '=') {
+      try {
+        const evalResult = eval(expression);
+        setResult(evalResult.toString()); // Set result in a separate box
+      } catch (error) {
+        setResult('Error');
+      }
+    } else {
+      setExpression(expression + value);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="calculator">
+      <h1>React Calculator</h1>
+      <Display value={expression} />
+      <Result value={result} />
+      <Buttons onButtonClick={handleButtonClick} />
     </div>
   );
 }
